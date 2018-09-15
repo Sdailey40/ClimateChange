@@ -1,5 +1,7 @@
 
 
+const pythonUrl = "/anamolies";
+
 function createMap(city_layer,
                     rng_1880_1910_layer,
                     rng_1911_1940_layer,
@@ -49,30 +51,35 @@ function createMap(city_layer,
   }).addTo(myMap);
 }
 
-function createCircles(data) {
-
-  var dataset = data.map(function(d) { return d});
-
-  var city_array = [];
-  var rng_1880_1910_array = [];
-  var rng_1911_1940_array = [];
-  var rng_1941_1970_array = [];
-  var rng_1971_2000_array = [];
-  var rng_2001_2017_array = [];
+function createCircles() {
   
-  for (var i = 0 ; i < dataset.length; i++){
+  
+  d3.json(pythonUrl).then(function(data) {
+    
+    pythonData = data[0];
 
-        var Lat = dataset[i].Lat;
-        var Lng = dataset[i].Lng;
-        var city = dataset[i].City;
-        var country = dataset[i].Country;
-        var rng_1880_1910 = dataset[i].rng_1880_1910;
-        var rng_1911_1940 = dataset[i].rng_1911_1940;
-        var rng_1941_1970 = dataset[i].rng_1941_1970;
-        var rng_1971_2000 = dataset[i].rng_1971_2000;
-        var rng_2001_2017 = dataset[i].rng_2001_2017;
+    var city_array = [];
+    var rng_1880_1910_array = [];
+    var rng_1911_1940_array = [];
+    var rng_1941_1970_array = [];
+    var rng_1971_2000_array = [];
+    var rng_2001_2017_array = [];
 
-        var city_circle_marker =  L.circle([Lat,Lng], {
+  for (var i=0; i < pythonData['City'].length; i++) {
+   
+    var Lat = pythonData['Lat'][i];
+    var Lng = pythonData['Lng'][i];
+    var city = pythonData['City'][i];
+    var country = pythonData['Country'][i];
+    var rng_1880_1910 = pythonData['rng_1880_1910'][i];
+    var rng_1911_1940 = pythonData['rng_1911_1940'][i];
+    var rng_1941_1970 = pythonData['rng_1941_1970'][i];
+    var rng_1971_2000 = pythonData['rng_1971_2000'][i];
+    var rng_2001_2017 = pythonData['rng_2001_2017'][i];
+
+      console.log(rng_1880_1910);
+
+      var city_circle_marker =  L.circle([Lat,Lng], {
             fillOpacity: 0.75,
             color:'red',
             fillColor: 'red',
@@ -121,25 +128,30 @@ function createCircles(data) {
       rng_1971_2000_array.push(rng_1971_2000_marker);
       rng_2001_2017_array.push(rng_2001_2017_marker);
 
-    }
-
    
-  city_layer = L.layerGroup(city_array);
-  rng_1880_1910_layer = L.layerGroup(rng_1880_1910_array);
-  rng_1911_1940_layer = L.layerGroup(rng_1911_1940_array);
-  rng_1941_1970_layer = L.layerGroup(rng_1941_1970_array);
-  rng_1971_2000_layer = L.layerGroup(rng_1971_2000_array);
-  rng_2001_2017_layer = L.layerGroup(rng_2001_2017_array);
+  }//for loop end
 
-  createMap(city_layer,
-            rng_1880_1910_layer,
-            rng_1911_1940_layer,
-            rng_1941_1970_layer,
-            rng_1971_2000_layer,
-            rng_2001_2017_layer
-          );
+  var city_layer = L.layerGroup(city_array);
+  var rng_1880_1910_layer = L.layerGroup(rng_1880_1910_array);
+  var rng_1911_1940_layer = L.layerGroup(rng_1911_1940_array);
+  var rng_1941_1970_layer = L.layerGroup(rng_1941_1970_array);
+  var rng_1971_2000_layer = L.layerGroup(rng_1971_2000_array);
+  var rng_2001_2017_layer = L.layerGroup(rng_2001_2017_array);
+
   
-}
+  createMap(city_layer,
+    rng_1880_1910_layer,
+    rng_1911_1940_layer,
+    rng_1941_1970_layer,
+    rng_1971_2000_layer,
+    rng_2001_2017_layer
+  ); 
+
+});//d3.json end
+    
+
+  
+};//get circles end
 
 
-d3.csv('climate_by_city.csv',createCircles);
+createCircles();
