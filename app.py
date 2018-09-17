@@ -35,7 +35,7 @@ def scrape():
     conn = 'mongodb://localhost:27017'
     client = pymongo.MongoClient(conn)
 
-    db = client.climate_anamolies
+    db = client.climate_change
     collection = db.anamoly_data   
 
     # # # Store results into a dictionary

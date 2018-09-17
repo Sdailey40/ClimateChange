@@ -2,12 +2,11 @@
 
 const pythonUrl = "/anamolies";
 
-function createMap(city_layer,
-                    rng_1880_1910_layer,
-                    rng_1911_1940_layer,
-                    rng_1941_1970_layer,
-                    rng_1971_2000_layer,
-                    rng_2001_2017_layer) {
+function createMap(rng_1880_1910_layer,
+                   rng_1911_1940_layer,
+                   rng_1941_1970_layer,
+                   rng_1971_2000_layer,
+                   rng_2001_2017_layer) {
 
   // Create the tile layer that will be the background of our map
   var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
@@ -24,7 +23,7 @@ function createMap(city_layer,
 
   // Create an overlayMaps object to hold the bikeStations layer
   var overlayMaps = {
-    "Climate City": city_layer,
+    
     "1880-1910": rng_1880_1910_layer,
     "1911-1940": rng_1911_1940_layer,
     "1941-1970": rng_1941_1970_layer,
@@ -35,9 +34,8 @@ function createMap(city_layer,
   // Create the map object with options
   var myMap = L.map("map", {
     center: [0, 0],
-    zoom: 5,
+    zoom: 3,
     layers: [lightmap, 
-             city_layer, 
             rng_1880_1910_layer,
             rng_1911_1940_layer,
             rng_1941_1970_layer,
@@ -51,87 +49,92 @@ function createMap(city_layer,
   }).addTo(myMap);
 }
 
+function tempColor(temp) {
+  switch (true) {
+  case (temp > -15.0 && temp <= -2.0):
+    return "blue";
+  case temp > -2 && temp < 4.0:
+    return "yellow";
+  case temp >= 4.0 && temp < 10.0:
+    return "orange";  
+  case temp >= 10.0:
+    return "red";    
+  default:
+    return "black";
+  }
+}
+
+
 function createCircles() {
   
-  
-  d3.json(pythonUrl).then(function(data) {
+    d3.json(pythonUrl).then(function(data) {
     
     pythonData = data[0];
 
-    var city_array = [];
     var rng_1880_1910_array = [];
     var rng_1911_1940_array = [];
     var rng_1941_1970_array = [];
     var rng_1971_2000_array = [];
     var rng_2001_2017_array = [];
 
-  for (var i=0; i < pythonData['City'].length; i++) {
+    for (var i=0; i < pythonData['City'].length; i++) {
    
-    var Lat = pythonData['Lat'][i];
-    var Lng = pythonData['Lng'][i];
-    var city = pythonData['City'][i];
-    var country = pythonData['Country'][i];
-    var rng_1880_1910 = pythonData['rng_1880_1910'][i];
-    var rng_1911_1940 = pythonData['rng_1911_1940'][i];
-    var rng_1941_1970 = pythonData['rng_1941_1970'][i];
-    var rng_1971_2000 = pythonData['rng_1971_2000'][i];
-    var rng_2001_2017 = pythonData['rng_2001_2017'][i];
+      var Lat = pythonData['Lat'][i];
+      var Lng = pythonData['Lng'][i];
+      var city = pythonData['City'][i];
+      var country = pythonData['Country'][i];
+      var rng_1880_1910 = pythonData['rng_1880_1910'][i];
+      var rng_1911_1940 = pythonData['rng_1911_1940'][i];
+      var rng_1941_1970 = pythonData['rng_1941_1970'][i];
+      var rng_1971_2000 = pythonData['rng_1971_2000'][i];
+      var rng_2001_2017 = pythonData['rng_2001_2017'][i];
 
-      console.log(rng_1880_1910);
-
-      var city_circle_marker =  L.circle([Lat,Lng], {
+      var rng_1880_1910_marker = L.circle([Lat,Lng], {
             fillOpacity: 0.75,
-            color:'red',
-            fillColor: 'red',
-            radius: 10000})
-            .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
+            color: tempColor(rng_1880_1910),
+            
+            radius: rng_1880_1910*-2000})
+            .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1880-1910: " + rng_1880_1910 + "</h3>");
 
-        var rng_1880_1910_marker = L.circle([Lat,Lng], {
+      var rng_1911_1940_marker = L.circle([Lat,Lng], {
             fillOpacity: 0.75,
-            color:'blue',
-            fillColor: 'blue',
-            radius: rng_1880_1910*10000})
-            .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
+            color:tempColor(rng_1911_1940),
+           
+            radius: rng_1911_1940*7000})
+            .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1911-1940: " + rng_1911_1940 + "</h3>");
 
-        var rng_1911_1940_marker = L.circle([Lat,Lng], {
-            fillOpacity: 0.75,
-            color:'blue',
-            fillColor: 'blue',
-            radius: rng_1911_1940*10000})
-            .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
-
-        var rng_1941_1970_marker = L.circle([Lat,Lng], {
+      var rng_1941_1970_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
-          color:'blue',
-          fillColor: 'blue',
+          color: tempColor(rng_1941_1970),
+         
           radius: rng_1941_1970*10000})
-          .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
+          .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1941-1970: " + rng_1941_1970 + "</h3>");
 
-        var rng_1971_2000_marker = L.circle([Lat,Lng], {
+      var rng_1971_2000_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
-          color:'blue',
-          fillColor: 'blue',
+          color:tempColor(rng_1971_2000),
+          
           radius: rng_1971_2000*10000})
-          .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
+          .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1971-2000: " + rng_1971_2000 + "</h3>");
 
-        var rng_2001_2017_marker = L.circle([Lat,Lng], {
+      var rng_2001_2017_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
-          color:'blue',
-          fillColor: 'blue',
+          color:tempColor(rng_2001_2017),
+          
           radius: rng_2001_2017*10000})
-          .bindPopup("<h1>City:" + city + "</h1> <hr> <h3>Country: " + country + "</h3>");
+          .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>2001-2017: " + rng_2001_2017 + "</h3>");
 
-      city_array.push(city_circle_marker);
-      rng_1880_1910_array.push(rng_1880_1910_marker);
-      rng_1911_1940_array.push(rng_1911_1940_marker);
-      rng_1941_1970_array.push(rng_1941_1970_marker);
-      rng_1971_2000_array.push(rng_1971_2000_marker);
-      rng_2001_2017_array.push(rng_2001_2017_marker);
+      
+    rng_1880_1910_array.push(rng_1880_1910_marker);
+    rng_1911_1940_array.push(rng_1911_1940_marker);
+    rng_1941_1970_array.push(rng_1941_1970_marker);
+    rng_1971_2000_array.push(rng_1971_2000_marker);
+    rng_2001_2017_array.push(rng_2001_2017_marker);
 
    
   }//for loop end
 
-  var city_layer = L.layerGroup(city_array);
+  
   var rng_1880_1910_layer = L.layerGroup(rng_1880_1910_array);
   var rng_1911_1940_layer = L.layerGroup(rng_1911_1940_array);
   var rng_1941_1970_layer = L.layerGroup(rng_1941_1970_array);
@@ -139,7 +142,7 @@ function createCircles() {
   var rng_2001_2017_layer = L.layerGroup(rng_2001_2017_array);
 
   
-  createMap(city_layer,
+  createMap(
     rng_1880_1910_layer,
     rng_1911_1940_layer,
     rng_1941_1970_layer,
@@ -152,6 +155,8 @@ function createCircles() {
 
   
 };//get circles end
+
+
 
 
 createCircles();

@@ -9,7 +9,6 @@ import gmaps
 import pymongo
 
 
-
 # Configure gmaps
 gmaps.configure(api_key = gkey)
 
@@ -17,14 +16,9 @@ gmaps.configure(api_key = gkey)
 conn = 'mongodb://localhost:27017'
 client = pymongo.MongoClient(conn)
 
-#creates db (climate_anamolies) and collection (anamoly_data) to hold data
-db = client.climate_anamolies
+#creates db (climate_change) and collection (anamoly_data) to hold data
+db = client.climate_change
 collection = db.anamoly_data
-
-#C:\Users\joelb\Documents\UNCC\lesson-plans\week-15-Interactive-Visualizations-and-Dashboards\3\Activities\03-Ins_Fullstack_Flask_Plotly
-# shows python data to db then to to javascript. using SQL lite
-#C:\Users\joelb\Documents\Github\hw_13_web_scraping
-#shows python data to db, no javascript but mongodb used
 
 
 def climate_scrape_func():
@@ -156,8 +150,6 @@ def climate_scrape_func():
 
         #turn df into a dictionary for processing into mongo
         climate_dict = climate_df.to_dict('list')
-
-        climate_df.to_excel('C:/Users/joelb/Documents/Github/ClimateChange/test.xlsx')
 
         #pair down the data into a dictionary to go in mongo db
         anamoly_dict = { "City" : climate_dict['City'],
