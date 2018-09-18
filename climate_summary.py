@@ -163,7 +163,7 @@ def climate_scrape_func():
                 'rng_2001_2017' : climate_dict['rng_2001_2017']
             }
 
-        # # Insert climae anamolies into mongo database
+        #  Insert climae anamolies into mongo database
         collection.insert_one(anamoly_dict)
 
 

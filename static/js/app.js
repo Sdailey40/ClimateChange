@@ -42,6 +42,11 @@ function createMap(rng_1880_1910_layer,
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+
+  // //when button is clicked this function is called and resizes the map to fit windo
+  $.expandMap = function(){ setTimeout(function(){ myMap.invalidateSize()}, 400)};
+
 }
 
 function tempColor(temp) {
@@ -151,9 +156,7 @@ function createCircles() {
     
 
   
-};//get circles end
+}//get circles end
 
-var mapButton = d3.select('#anamoly');
 
-mapButton.on("click", createCircles());
-
+createCircles();
