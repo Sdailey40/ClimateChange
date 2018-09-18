@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/climate_anamolies"
 mongo = PyMongo(app)
 
-#create route that renders index.html template
+#create route that renders index.html.
 @app.route("/")
 def home():
       # return template 
@@ -23,41 +23,14 @@ def home():
 @app.route("/anamolies")
 def scrape():
 
-    # #climate_scrape_func() is the function built in the other python file (climate_summary.py)
-    # climate_df = pd.read_excel('C:/Users/joelb/Documents/Github/ClimateChange/climate_by_city.xlsx')
-       
-    # climate_df.columns = [str(i) for i in climate_df.columns.values.tolist()]
-
-    # anamoly_data = climate_df.to_dict('list')
-
-    # anamoly_data = climate_summary.climate_scrape_func()
-
     conn = 'mongodb://localhost:27017'
     client = pymongo.MongoClient(conn)
 
     db = client.climate_change
     collection = db.anamoly_data   
 
-    # # # Store results into a dictionary
-    # anamoly_dict = { "City" : anamoly_data['City'],
-    #             "Country" : anamoly_data['Country'],
-    #             "Lat" : anamoly_data['Lat'],
-    #             "Lng" : anamoly_data['Lng'],
-    #             "rng_1880_1910" : anamoly_data['rng_1880_1910'],
-    #             "rng_1911_1940" : anamoly_data['rng_1911_1940'],
-    #             "rng_1941_1970": anamoly_data['rng_1941_1970'],
-    #             'rng_1971_2000' : anamoly_data['rng_1971_2000'],
-    #             'rng_2001_2017' : anamoly_data['rng_2001_2017']
-    #         }
-    
-
-    # # Insert forecast into database
-    # mongo.db.collection.insert_one(anamoly_dict)
-
     anamoly_dict = list(collection.find())
-    
-   
-    # anamoly_dict.pop('_id')
+
 
     return json.dumps(anamoly_dict, default=json_util.default)
     

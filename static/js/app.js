@@ -1,6 +1,6 @@
 
 
-const pythonUrl = "/anamolies";
+
 
 function createMap(rng_1880_1910_layer,
                    rng_1911_1940_layer,
@@ -35,12 +35,7 @@ function createMap(rng_1880_1910_layer,
   var myMap = L.map("map", {
     center: [0, 0],
     zoom: 3,
-    layers: [lightmap, 
-            rng_1880_1910_layer,
-            rng_1911_1940_layer,
-            rng_1941_1970_layer,
-            rng_1971_2000_layer,
-            rng_2001_2017_layer]
+    layers: [lightmap]
   });
 
   // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
@@ -66,7 +61,9 @@ function tempColor(temp) {
 
 
 function createCircles() {
-  
+    
+    const pythonUrl = "/anamolies";
+
     d3.json(pythonUrl).then(function(data) {
     
     pythonData = data[0];
@@ -156,7 +153,7 @@ function createCircles() {
   
 };//get circles end
 
+var mapButton = d3.select('#anamoly');
 
+mapButton.on("click", createCircles());
 
-
-createCircles();
