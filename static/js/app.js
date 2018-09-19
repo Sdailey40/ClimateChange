@@ -1,7 +1,5 @@
 
-
-
-
+//create the map function
 function createMap(rng_1880_1910_layer,
                    rng_1911_1940_layer,
                    rng_1941_1970_layer,
@@ -49,6 +47,7 @@ function createMap(rng_1880_1910_layer,
 
 }
 
+//determines the color of the circle depending on the temperature
 function tempColor(temp) {
   switch (true) {
   case (temp > -15.0 && temp <= -2.0):
@@ -64,23 +63,29 @@ function tempColor(temp) {
   }
 }
 
-
+//function createst the circle layers for the map
 function createCircles() {
     
+    //route from app.py (where the json data comes from)
     const pythonUrl = "/anamolies";
 
+    //reads the json data from the route and then process the function
     d3.json(pythonUrl).then(function(data) {
     
+    //convert the json data into an arrayc that can be iterated over
     pythonData = data[0];
 
+    //setup year array's to hold that years circle markers
     var rng_1880_1910_array = [];
     var rng_1911_1940_array = [];
     var rng_1941_1970_array = [];
     var rng_1971_2000_array = [];
     var rng_2001_2017_array = [];
 
+    //loop through the array to create the markers
     for (var i=0; i < pythonData['City'].length; i++) {
-   
+      
+      //put the data into variables
       var Lat = pythonData['Lat'][i];
       var Lng = pythonData['Lng'][i];
       var city = pythonData['City'][i];
@@ -91,42 +96,39 @@ function createCircles() {
       var rng_1971_2000 = pythonData['rng_1971_2000'][i];
       var rng_2001_2017 = pythonData['rng_2001_2017'][i];
 
+
+      //create markers for the year ranges
       var rng_1880_1910_marker = L.circle([Lat,Lng], {
             fillOpacity: 0.75,
             color: tempColor(rng_1880_1910),
-            
             radius: rng_1880_1910*-2000})
             .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1880-1910: " + rng_1880_1910 + "</h3>");
 
       var rng_1911_1940_marker = L.circle([Lat,Lng], {
             fillOpacity: 0.75,
             color:tempColor(rng_1911_1940),
-           
             radius: rng_1911_1940*7000})
             .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1911-1940: " + rng_1911_1940 + "</h3>");
 
       var rng_1941_1970_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
           color: tempColor(rng_1941_1970),
-         
           radius: rng_1941_1970*10000})
           .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1941-1970: " + rng_1941_1970 + "</h3>");
 
       var rng_1971_2000_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
           color:tempColor(rng_1971_2000),
-          
           radius: rng_1971_2000*10000})
           .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1971-2000: " + rng_1971_2000 + "</h3>");
 
       var rng_2001_2017_marker = L.circle([Lat,Lng], {
           fillOpacity: 0.75,
           color:tempColor(rng_2001_2017),
-          
           radius: rng_2001_2017*10000})
           .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>2001-2017: " + rng_2001_2017 + "</h3>");
 
-      
+    //put the markers into arrays
     rng_1880_1910_array.push(rng_1880_1910_marker);
     rng_1911_1940_array.push(rng_1911_1940_marker);
     rng_1941_1970_array.push(rng_1941_1970_marker);
@@ -136,14 +138,14 @@ function createCircles() {
    
   }//for loop end
 
-  
+  //create layes with the array's
   var rng_1880_1910_layer = L.layerGroup(rng_1880_1910_array);
   var rng_1911_1940_layer = L.layerGroup(rng_1911_1940_array);
   var rng_1941_1970_layer = L.layerGroup(rng_1941_1970_array);
   var rng_1971_2000_layer = L.layerGroup(rng_1971_2000_array);
   var rng_2001_2017_layer = L.layerGroup(rng_2001_2017_array);
 
-  
+  //calls the createMap function with the layers as arguments
   createMap(
     rng_1880_1910_layer,
     rng_1911_1940_layer,
@@ -158,5 +160,5 @@ function createCircles() {
   
 }//get circles end
 
-
+//call the function
 createCircles();

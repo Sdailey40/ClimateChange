@@ -10,10 +10,6 @@ import pymongo
 # create instance of Flask app
 app = Flask(__name__)
 
-# Use flask_pymongo to set up mongo connection
-app.config["MONGO_URI"] = "mongodb://localhost:27017/climate_anamolies"
-mongo = PyMongo(app)
-
 #create route that renders index.html.
 @app.route("/")
 def home():
@@ -23,15 +19,18 @@ def home():
 @app.route("/anamolies")
 def scrape():
 
+    #connect to mongo db
     conn = 'mongodb://localhost:27017'
     client = pymongo.MongoClient(conn)
 
+    #set db variable to climate_change db
     db = client.climate_change
-    collection = db.anamoly_data   
-
+    #set collection variable to anamoly_data collection
+    collection = db.anamoly_data
+    #convert collection into a dictionary for the json dumps function
     anamoly_dict = list(collection.find())
 
-
+    #return json data when the route is called
     return json.dumps(anamoly_dict, default=json_util.default)
     
 
