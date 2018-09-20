@@ -16,7 +16,7 @@ def home():
       # return template 
     return render_template("index.html")
 
-@app.route("/anamolies")
+@app.route("/anomalies")
 def scrape():
 
     #connect to mongo db
@@ -25,13 +25,14 @@ def scrape():
 
     #set db variable to climate_change db
     db = client.climate_change
+
     #set collection variable to anamoly_data collection
-    collection = db.anamoly_data
+    collection = db.anomaly_data
     #convert collection into a dictionary for the json dumps function
-    anamoly_dict = list(collection.find())
+    anomaly_dict = list(collection.find())
 
     #return json data when the route is called
-    return json.dumps(anamoly_dict, default=json_util.default)
+    return json.dumps(anomaly_dict, default=json_util.default)
     
 
 if __name__ == "__main__":

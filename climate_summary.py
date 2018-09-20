@@ -18,8 +18,7 @@ client = pymongo.MongoClient(conn)
 
 #creates db (climate_change) and collection (anamoly_data) to hold data
 db = client.climate_change
-collection = db.anamoly_data
-
+collection = db.anomaly_data
 
 def climate_scrape_func():
 
@@ -29,7 +28,7 @@ def climate_scrape_func():
         url = 'https://en.wikipedia.org/wiki/List_of_national_capitals_by_latitude'
 
         #temperaturate anamolies from https://data.giss.nasa.gov/gistemp/
-        zonal_temp_anamolies = pd.read_csv('C:/Users/joelb/Documents/Github/ClimateChange/ZonAnn.Ts+dSST.csv')
+        zonal_temp_anomalies = pd.read_csv('C:/Users/joelb/Documents/Github/ClimateChange/ZonAnn.Ts+dSST.csv')
 
         # scrape html table from wikipediea
         tables = pd.read_html(url)
@@ -50,24 +49,35 @@ def climate_scrape_func():
         #if lat is negative its south, if positive its north
         city_by_hemisphere['Hemisphere'] = np.where(city_by_hemisphere['Latitude']<=0, 'south', 'north')
 
-
         #determies what zone of the hemisphere the city is in
-        city_by_hemisphere['zone'] = np.where(np.logical_and(                                     np.logical_and(city_by_hemisphere['Latitude']>0,city_by_hemisphere['Latitude']<=24),                                             city_by_hemisphere['Hemisphere'] == 'north'),'EQU-24N',                              np.where(np.logical_and(                                     np.logical_and(city_by_hemisphere['Latitude']>24,city_by_hemisphere['Latitude']<=44),                                             city_by_hemisphere['Hemisphere'] == 'north'),'24N-44N',
+        city_by_hemisphere['zone'] = np.where(np.logical_and( \
+                                        np.logical_and(city_by_hemisphere['Latitude']>0,city_by_hemisphere['Latitude']<=24), \
+                                        city_by_hemisphere['Hemisphere'] == 'north'),'EQU-24N', \
+                                
+                                np.where(np.logical_and( \
+                                        np.logical_and(city_by_hemisphere['Latitude']>24,city_by_hemisphere['Latitude']<=44), \
+                                        city_by_hemisphere['Hemisphere'] == 'north'),'24N-44N', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']>44,city_by_hemisphere['Latitude']<=64), \
-                                                city_by_hemisphere['Hemisphere'] == 'north'),'44N-64N',
+                                                city_by_hemisphere['Hemisphere'] == 'north'),'44N-64N', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']>64,city_by_hemisphere['Latitude']<=90), \
                                                 city_by_hemisphere['Hemisphere'] == 'north'),'64N-90N', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']<0,city_by_hemisphere['Latitude']>=-24), \
                                                 city_by_hemisphere['Hemisphere'] == 'south'),'24S-EQU', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']<-24,city_by_hemisphere['Latitude']>=-44), \
                                                 city_by_hemisphere['Hemisphere'] == 'south'),'44S-24S', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']<-44,city_by_hemisphere['Latitude']>=-64), \
                                                 city_by_hemisphere['Hemisphere'] == 'south'),'64S-44S', \
+                                
                                 np.where(np.logical_and( \
                                         np.logical_and(city_by_hemisphere['Latitude']<-64,city_by_hemisphere['Latitude']>=-90), \
                                                 city_by_hemisphere['Hemisphere'] == 'south'),'64S-44S', \
@@ -75,13 +85,13 @@ def climate_scrape_func():
         year_header = []
 
         #get column headers for the year to be used later
-        year_header = list(zonal_temp_anamolies['Year'])
+        year_header = list(zonal_temp_anomalies['Year'])
 
         #transpose the dataframe for merging
-        zonal_temp_anamolies = zonal_temp_anamolies.transpose()
+        zonal_temp_anomalies = zonal_temp_anomalies.transpose()
 
         #merge the city capitals with the zonal temperature data
-        climate_df =  city_by_hemisphere.merge(zonal_temp_anamolies, how='left', left_on='zone', right_index=True)
+        climate_df =  city_by_hemisphere.merge(zonal_temp_anomalies, how='left', left_on='zone', right_index=True)
 
         #rename columns to the appropriate year
         climate_df.rename(columns=dict(zip(climate_df.columns[6:],year_header)),inplace=True)
@@ -152,7 +162,7 @@ def climate_scrape_func():
         climate_dict = climate_df.to_dict('list')
 
         #pair down the data into a dictionary to go in mongo db
-        anamoly_dict = { "City" : climate_dict['City'],
+        anomaly_dict = { "City" : climate_dict['City'],
                 "Country" : climate_dict['Country'],
                 "Lat" : climate_dict['Lat'],
                 "Lng" : climate_dict['Lng'],
@@ -164,7 +174,7 @@ def climate_scrape_func():
             }
 
         #  Insert climae anamolies into mongo database
-        collection.insert_one(anamoly_dict)
+        collection.insert_one(anomaly_dict)
 
 
 climate_scrape_func()

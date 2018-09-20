@@ -13,28 +13,27 @@
     crossorigin=""></script>
    
     
- <!-- d3 JS -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
+    <!-- d3 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
 
-     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
-integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
- 
+        <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    
 
     <!-- Our CSS -->
     <link rel="stylesheet" type="text/css" href="static/styles/style.css">
 
   </head>
-  <body>
-       
+  
+  
+    <body>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#map" 
       aria-expanded="false" aria-controls="collapseExample" href="#" onclick="$.expandMap()">
-          Climate Anamolies Map 
+          Climate Anomalies Map 
       </button>
     
     <div id="map"  class="collapse"> </div>
-
-
 
     <script src="{{ url_for('static', filename='js/config.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

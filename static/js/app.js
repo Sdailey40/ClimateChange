@@ -1,5 +1,7 @@
 
 //create the map function
+
+
 function createMap(rng_1880_1910_layer,
                    rng_1911_1940_layer,
                    rng_1941_1970_layer,
@@ -7,12 +9,14 @@ function createMap(rng_1880_1910_layer,
                    rng_2001_2017_layer) {
 
   // Create the tile layer that will be the background of our map
-  var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+  var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://mapbox.com\">Mapbox</a>",
     maxZoom: 18,
-    id: "mapbox.streets",
+    id: "mapbox.satellite-v9",
     accessToken: API_KEY
   });
+
+  
 
   // Create a baseMaps object to hold the lightmap layer
   var baseMaps = {
@@ -29,12 +33,12 @@ function createMap(rng_1880_1910_layer,
     "2001-2017": rng_2001_2017_layer
   };
 
-  // Create the map object with options
-  var myMap = L.map("map", {
-    center: [0, 0],
-    zoom: 3,
-    layers: [lightmap]
-  });
+    // Create the map object with options
+    var myMap = L.map("map", {
+      center: [0, 0],
+      zoom: 3,
+      layers: [lightmap]
+    });
 
   // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {
@@ -59,7 +63,7 @@ function tempColor(temp) {
   case temp >= 10.0:
     return "red";    
   default:
-    return "black";
+    return "purple";
   }
 }
 
@@ -67,8 +71,7 @@ function tempColor(temp) {
 function createCircles() {
     
     //route from app.py (where the json data comes from)
-    const pythonUrl = "/anamolies";
-
+    const pythonUrl = "/anomalies";
     //reads the json data from the route and then process the function
     d3.json(pythonUrl).then(function(data) {
     
@@ -161,4 +164,5 @@ function createCircles() {
 }//get circles end
 
 //call the function
+
 createCircles();
