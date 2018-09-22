@@ -21,6 +21,7 @@ function createAnamolyMap() {
     
     //route from app.py (where the json data comes from)
     const pythonUrl = "/anomalies";
+    
     //reads the json data from the route and then process the function
     d3.json(pythonUrl).then(function(data) {
     
@@ -136,11 +137,8 @@ L.control.layers(baseMaps, overlayMaps, {
 // // //when button is clicked this function is called and resizes the map to fit windo
 // $.expandMap = function(){ setTimeout(function(){ myMap.invalidateSize()}, 400)};
 
-});//d3.json end
-    
-
+});//d3.json end    
   
-}//get circles end
+}//function end
 
-//call the function
 

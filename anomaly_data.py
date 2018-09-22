@@ -122,7 +122,6 @@ def climate_scrape_func():
 
         for index, row in climate_df.iterrows():
 
-               
                 base_url = "https://maps.googleapis.com/maps/api/geocode/json"
 
                 city = row['City']
@@ -130,7 +129,6 @@ def climate_scrape_func():
 
                 # update address key value
                 params['address'] = f"{city},{country}"
-            
 
                 # make request, print url
                 cities_lat_lng = requests.get(base_url, params=params)
@@ -139,7 +137,6 @@ def climate_scrape_func():
                 cities_lat_lng = cities_lat_lng.json()
                 
                 try:
-
                         climate_df.loc[index, "Lat"] = cities_lat_lng["results"][0]["geometry"]["location"]["lat"]
                         climate_df.loc[index, "Lng"] = cities_lat_lng["results"][0]["geometry"]["location"]["lng"]
 
