@@ -13,7 +13,8 @@ app = Flask(__name__)
 #create route that renders index.html.
 @app.route("/")
 def home():
-      # return template 
+    
+    # return template 
     return render_template("index.html")
 
 @app.route("/anomalies")
@@ -26,7 +27,7 @@ def scrape():
     #set db variable to climate_change db
     db = client.climate_change
 
-    #set collection variable to anamoly_data collection
+    #set collection variable to anomaly_data collection
     collection = db.anomaly_data
     
     #convert collection into a dictionary for the json dumps function
