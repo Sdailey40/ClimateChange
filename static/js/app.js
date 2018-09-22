@@ -1,55 +1,4 @@
 
-//create the map function
-
-
-function createMap(rng_1880_1910_layer,
-                   rng_1911_1940_layer,
-                   rng_1941_1970_layer,
-                   rng_1971_2000_layer,
-                   rng_2001_2017_layer) {
-
-  // Create the tile layer that will be the background of our map
-  var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://mapbox.com\">Mapbox</a>",
-    maxZoom: 18,
-    id: "mapbox.satellite-v9",
-    accessToken: API_KEY
-  });
-
-  
-
-  // Create a baseMaps object to hold the lightmap layer
-  var baseMaps = {
-    "Light Map": lightmap
-  };
-
-  // Create an overlayMaps object to hold the bikeStations layer
-  var overlayMaps = {
-    
-    "1880-1910": rng_1880_1910_layer,
-    "1911-1940": rng_1911_1940_layer,
-    "1941-1970": rng_1941_1970_layer,
-    "1971-2000": rng_1971_2000_layer,
-    "2001-2017": rng_2001_2017_layer
-  };
-
-    // Create the map object with options
-    var myMap = L.map("map", {
-      center: [0, 0],
-      zoom: 3,
-      layers: [lightmap]
-    });
-
-  // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
-  L.control.layers(baseMaps, overlayMaps, {
-    collapsed: false
-  }).addTo(myMap);
-
-
-  // //when button is clicked this function is called and resizes the map to fit windo
-  $.expandMap = function(){ setTimeout(function(){ myMap.invalidateSize()}, 400)};
-
-}
 
 //determines the color of the circle depending on the temperature
 function tempColor(temp) {
@@ -68,7 +17,7 @@ function tempColor(temp) {
 }
 
 //function createst the circle layers for the map
-function createCircles() {
+function createAnamolyMap() {
     
     //route from app.py (where the json data comes from)
     const pythonUrl = "/anomalies";
@@ -131,12 +80,12 @@ function createCircles() {
           radius: rng_2001_2017*10000})
           .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>2001-2017: " + rng_2001_2017 + "</h3>");
 
-    //put the markers into arrays
-    rng_1880_1910_array.push(rng_1880_1910_marker);
-    rng_1911_1940_array.push(rng_1911_1940_marker);
-    rng_1941_1970_array.push(rng_1941_1970_marker);
-    rng_1971_2000_array.push(rng_1971_2000_marker);
-    rng_2001_2017_array.push(rng_2001_2017_marker);
+      //put the markers into arrays
+      rng_1880_1910_array.push(rng_1880_1910_marker);
+      rng_1911_1940_array.push(rng_1911_1940_marker);
+      rng_1941_1970_array.push(rng_1941_1970_marker);
+      rng_1971_2000_array.push(rng_1971_2000_marker);
+      rng_2001_2017_array.push(rng_2001_2017_marker);
 
    
   }//for loop end
@@ -148,14 +97,44 @@ function createCircles() {
   var rng_1971_2000_layer = L.layerGroup(rng_1971_2000_array);
   var rng_2001_2017_layer = L.layerGroup(rng_2001_2017_array);
 
-  //calls the createMap function with the layers as arguments
-  createMap(
-    rng_1880_1910_layer,
-    rng_1911_1940_layer,
-    rng_1941_1970_layer,
-    rng_1971_2000_layer,
-    rng_2001_2017_layer
-  ); 
+  // Create the tile layer that will be the background of our map
+  var satelliteMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://mapbox.com\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.satellite-v9",
+    accessToken: API_KEY
+  });
+
+  // Create a baseMaps object to hold the lightmap layer
+  var baseMaps = {
+    "Satellite Map": satelliteMap
+  };
+
+  // Create an overlayMaps object to hold the bikeStations layer
+  var overlayMaps = {
+    
+    "1880-1910": rng_1880_1910_layer,
+    "1911-1940": rng_1911_1940_layer,
+    "1941-1970": rng_1941_1970_layer,
+    "1971-2000": rng_1971_2000_layer,
+    "2001-2017": rng_2001_2017_layer
+  };
+
+  // Create the map object with options
+  var climateAnamolyMap = L.map("climateAnamolyMap", {
+    center: [0, 0],
+    zoom: 3,
+    layers: [satelliteMap]
+  });
+
+// Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
+L.control.layers(baseMaps, overlayMaps, {
+  collapsed: false
+}).addTo(climateAnamolyMap);
+
+
+// // //when button is clicked this function is called and resizes the map to fit windo
+// $.expandMap = function(){ setTimeout(function(){ myMap.invalidateSize()}, 400)};
 
 });//d3.json end
     
@@ -165,4 +144,3 @@ function createCircles() {
 
 //call the function
 
-createCircles();

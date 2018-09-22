@@ -28,6 +28,7 @@ def scrape():
 
     #set collection variable to anamoly_data collection
     collection = db.anomaly_data
+    
     #convert collection into a dictionary for the json dumps function
     anomaly_dict = list(collection.find())
 

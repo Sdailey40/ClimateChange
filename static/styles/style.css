@@ -3,7 +3,7 @@ body {
   margin: 0;
 }
 
-#map,
+#climateAnamolyMap,
 body,
 html {
   height: 100%;
@@ -19,4 +19,15 @@ html {
   float: left;
   margin-right: 8px;
   opacity: 0.7;
+}
+
+.mapBtn {
+
+  margin-top: 20px;
+}
+
+.precipBtn {
+
+padding-left: 50px;
+
 }
