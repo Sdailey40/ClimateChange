@@ -16,9 +16,20 @@ function tempColor(temp) {
   }
 }
 
+function toggleMap() {
+  if($("#climateAnamolyMap").css("display") == "none") {
+    $("#climateAnamolyMap").show();
+    createAnamolyMap();
+
+  } else { 
+    $("#climateAnamolyMap").hide();
+
+  }
+}
+
 //function createst the circle layers for the map
 function createAnamolyMap() {
-    
+   
     //route from app.py (where the json data comes from)
     const pythonUrl = "/anomalies";
     
@@ -49,13 +60,26 @@ function createAnamolyMap() {
       var rng_1971_2000 = pythonData['rng_1971_2000'][i];
       var rng_2001_2017 = pythonData['rng_2001_2017'][i];
 
+      var rng_1880_1910_icon = L.divIcon({
+        iconSize: [10, 10],
+        iconAnchor: [10, 10],
+        popupAnchor: [10, 0],
+        shadowSize: [0, 0],
+        className: 'rng_1880_1910_icon' 
+    })
 
       //create markers for the year ranges
-      var rng_1880_1910_marker = L.circle([Lat,Lng], {
-            fillOpacity: 0.75,
-            color: tempColor(rng_1880_1910),
-            radius: rng_1880_1910*-2000})
-            .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1880-1910: " + rng_1880_1910 + "</h3>");
+      // var rng_1880_1910_marker = L.circle([Lat,Lng], {
+      //       fillOpacity: 0.75,
+      //       color: tempColor(rng_1880_1910),
+      //       radius: rng_1880_1910*-2000})
+      //       .bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1880-1910: " + rng_1880_1910 + "</h3>");
+
+      var rng_1880_1910_marker = L.marker([Lat,Lng], {
+        icon: rng_1880_1910_icon
+
+      }).bindPopup("<h1>Country:" + country + "</h1> <hr> <h3>1880-1910: " + rng_1880_1910 + "</h3>");
+
 
       var rng_1911_1940_marker = L.circle([Lat,Lng], {
             fillOpacity: 0.75,
@@ -133,9 +157,6 @@ L.control.layers(baseMaps, overlayMaps, {
   collapsed: false
 }).addTo(climateAnamolyMap);
 
-
-// // //when button is clicked this function is called and resizes the map to fit windo
-// $.expandMap = function(){ setTimeout(function(){ myMap.invalidateSize()}, 400)};
 
 });//d3.json end    
   
