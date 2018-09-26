@@ -45,10 +45,13 @@ background-size: cover;
  border-radius: 100px;
  position: relative;
  cursor: pointer;
- background-image:radial-gradient(#abf596,rgb(0, 13, 255));
+ background-image:radial-gradient(#4ee966,rgb(0, 13, 255));
 }
 
+.row {
 
+  margin-top: 20px;
+}
 
 .well-text {
   position: absolute;
@@ -57,6 +60,7 @@ background-size: cover;
   transform: translate(-50%, -50%);
  color:white;
  display: block;
+ text-shadow: 1px 1px #1ded47;
 }
 
 
@@ -68,6 +72,10 @@ background-size: cover;
 
 }
 
+.circle_animations {
+  animation: spinY 10s infinite ;
+  transform-style: preserve-3d;
+}
 
 @keyframes icons  { 
   from { opacity: .5; } 
@@ -78,4 +86,13 @@ background-size: cover;
   0% {opacity: 0.2} 
   50% {opacity: 1}
   100% {opacity:0.2}
+}
+
+@keyframes spinY {
+  from {transform:rotateY(180deg);
+    
+      }
+  to {transform:rotateY(360deg);
+    
+    }
 }

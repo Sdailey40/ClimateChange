@@ -34,6 +34,8 @@ function toggleMap() {
 
     //change earth circle to red gradient
     $('.circle').css('background-image', 'radial-gradient(#f5bf96,rgb(255, 0, 0))');
+    $('.circle').addClass('circle_animations');
+    $( ".earth_text" ).empty();
 
     
   }
