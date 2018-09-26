@@ -6,7 +6,7 @@ function tempColor(temp) {
   switch (true) {
   
     case (temp > -15.0 && temp <= -2.0):
-      return "rgb(72, 15, 216)"; //blue
+      return "rgb(66, 194, 244)"; //blue
     
     case temp > -2 && temp < 4.0:
       return "rgb(255, 238, 0)"; //yellow
