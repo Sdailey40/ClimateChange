@@ -50,7 +50,7 @@ background-size: cover;
 
 .row {
 
-  margin-top: 20px;
+  margin-top: 135px;
 }
 
 .well-text {
@@ -63,8 +63,6 @@ background-size: cover;
  text-shadow: 1px 1px #1ded47;
 }
 
-
-
 .myListener {
  
   box-shadow: 0px 0px 4px white;
@@ -73,8 +71,7 @@ background-size: cover;
 }
 
 .circle_animations {
-  animation: spinY 10s infinite ;
-  transform-style: preserve-3d;
+  animation: orbit 10s infinite linear;
 }
 
 @keyframes icons  { 
@@ -88,11 +85,18 @@ background-size: cover;
   100% {opacity:0.2}
 }
 
-@keyframes spinY {
-  from {transform:rotateY(180deg);
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg)
+               translate(-150px)
+               rotate(0deg);
     
-      }
-  to {transform:rotateY(360deg);
-    
-    }
+  }
+  to {
+    transform: rotate(360deg)
+               translate(-150px) 
+               rotate(-360deg);
+               
+  }
 }
