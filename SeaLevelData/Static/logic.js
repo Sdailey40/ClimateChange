@@ -1,73 +1,19 @@
 // Function to determine marker size based on population
-function markerSize(population) {
-  return population / 40;
-}
+
+#function markerSize(population) {
+ # return population;
+#}
 
 // An array containing all of the information needed to create city and state markers
-var locations = [
-  {
-    coordinates: [40.7128, -74.0059],
-    state: {
-      name: "New York State",
-      population: 19795791
-    },
-    city: {
-      name: "New York",
-      population: 8550405
-    }
-  },
-  {
-    coordinates: [34.0522, -118.2437],
-    state: {
-      name: "California",
-      population: 39250017
-    },
-    city: {
-      name: "Lost Angeles",
-      population: 3971883
-    }
-  },
-  {
-    coordinates: [41.8781, -87.6298],
-    state: {
-      name: "Michigan",
-      population: 9928300
-    },
-    city: {
-      name: "Chicago",
-      population: 2720546
-    }
-  },
-  {
-    coordinates: [29.7604, -95.3698],
-    state: {
-      name: "Texas",
-      population: 26960000
-    },
-    city: {
-      name: "Houston",
-      population: 2296224
-    }
-  },
-  {
-    coordinates: [41.2524, -95.9980],
-    state: {
-      name: "Nebraska",
-      population: 1882000
-    },
-    city: {
-      name: "Omaha",
-      population: 446599
-    }
-  }
-];
+#var locations = 
+
 
 // Define arrays to hold created city and state markers
-var cityMarkers = [];
-var stateMarkers = [];
+#var cityMarkers = [];
+#var stateMarkers = [];
 
 // Loop through locations and create city and state markers
-for (var i = 0; i < locations.length; i++) {
+#for (var i = 0; i < locations.length; i++) {
   // Setting the marker radius for the state by passing population into the markerSize function
   stateMarkers.push(
     L.circle(locations[i].coordinates, {
@@ -89,17 +35,34 @@ for (var i = 0; i < locations.length; i++) {
       radius: markerSize(locations[i].city.population)
     })
   );
+#}
+function getPins() {
+  bounds = maps.getBounds();
+  url = "mongodb://localhost:27017/Dion_db" + bounds.get().latitude + "longitude" + bounds.get().longitude
+  $.get (url, pinTheMap, "json")
 }
 
+function pinTheMap(data) {
+  map.removelayer(MarkerLayerGroup);
+
+  var markerArray = new Array (data.length)
+  for (var i = 0; i < data.length; i++){
+        park = data [i];
+        markerArray [i] = L.marker([park.pos[1], park.pos[0]]).bindPopup(park.Name);
+  }
+
+        markerLayerGroup = L.LayerGroup(markerArray).addTO(map);
+
+  
 // Define variables for our base layers
-var streetmap = L.tileLayer("{https://api.census.gov/data/2016/acs/acs1?get=NAME,B01003_001E,B17001_002E&for=state:*&key=}", {
+var streetmap = L.tileLayer({
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.streets",
   accessToken: API_KEY
 });
 
-var darkmap = L.tileLayer("{https://api.census.gov/data/2016/acs/acs1?get=NAME,B01003_001E,B17001_002E&for=state:*&key=}", {
+var darkmap = L.tileLayer({
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.dark",
@@ -107,9 +70,13 @@ var darkmap = L.tileLayer("{https://api.census.gov/data/2016/acs/acs1?get=NAME,B
 });
 
 // Create two separate layer groups: one for cities and one for states
-var states = L.layerGroup(stateMarkers);
-var cities = L.layerGroup(cityMarkers);
+#var states = L.layerGroup(stateMarkers);
+#var cities = L.layerGroup(cityMarkers);
 
+
+map.on('dragend', getPins);
+map.on('zoomend', getPins);
+map.whenReady(getPins)
 // Create a baseMaps object
 var baseMaps = {
   "Street Map": streetmap,
@@ -117,9 +84,9 @@ var baseMaps = {
 };
 
 // Create an overlay object
-var overlayMaps = {
-  "State Population": states,
-  "City Population": cities
+#var overlayMaps = {
+ # "State Population": states,
+  #"City Population": cities
 };
 
 // Define a map object
